@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -6,7 +6,7 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
-} from 'react-native';
+} from "react-native";
 
 export default function HomeScreen() {
   return (
@@ -19,7 +19,7 @@ export default function HomeScreen() {
         <Text style={styles.appTitle}>CopOnCloud</Text>
         <TouchableOpacity>
           <Image
-            source={{ uri: 'https://via.placeholder.com/40' }} // Replace with avatar image
+            source={{ uri: "https://via.placeholder.com/40" }} // Replace with avatar image
             style={styles.avatar}
           />
         </TouchableOpacity>
@@ -28,7 +28,7 @@ export default function HomeScreen() {
       {/* Welcome Section */}
       <View style={styles.welcomeContainer}>
         <Text style={styles.welcomeText}>
-          Hi, Mike 👋{'\n'}
+          Hi, Mike 👋{"\n"}
           Welcome
         </Text>
       </View>
@@ -71,24 +71,24 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: "#000",
     paddingHorizontal: 20,
     paddingTop: 40,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 20,
   },
   menuIcon: {
     fontSize: 24,
-    color: '#fff',
+    color: "#fff",
   },
   appTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontWeight: "bold",
+    color: "#fff",
   },
   avatar: {
     width: 40,
@@ -100,13 +100,13 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontWeight: "bold",
+    color: "#fff",
   },
   searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#222',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#222",
     borderRadius: 10,
     paddingHorizontal: 10,
     marginBottom: 20,
@@ -114,46 +114,46 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     height: 40,
-    color: '#fff',
+    color: "#fff",
   },
   searchIcon: {
     fontSize: 20,
-    color: '#fff',
+    color: "#fff",
   },
   filterContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 20,
   },
   filterButton: {
-    backgroundColor: '#333',
+    backgroundColor: "#333",
     borderRadius: 20,
     paddingVertical: 5,
     paddingHorizontal: 15,
   },
   filterText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 14,
   },
   cardContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   card: {
-    backgroundColor: '#ffd700',
+    backgroundColor: "#ffd700",
     borderRadius: 10,
-    width: '45%',
+    width: "45%",
     height: 120,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
   },
   cardTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#000',
+    fontWeight: "bold",
+    color: "#000",
   },
 });
