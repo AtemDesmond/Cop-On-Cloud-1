@@ -1,142 +1,216 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  StyleSheet,
   View,
+  Text,
+  StyleSheet,
   TextInput,
   TouchableOpacity,
-  Text,
+  ScrollView,
+  ImageBackground,
 } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { Formik } from "formik";
+import * as Yup from "yup"; // For validation schema
+
+import HomeBackground from "../images/HomeBackground.jpg";
 
 const ContinueReportCrime = () => {
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-
-  const handleNameChange = (text) => {
-    setName(text);
-  };
-
-  const handleSurnameChange = (text) => {
-    setSurname(text);
-  };
-
-  const handleEmailChange = (text) => {
-    setEmail(text);
-  };
-
-  const handleMessageChange = (text) => {
-    setMessage(text);
-  };
-
-  const handleSubmit = () => {
-    // Handle form submission logic here
-  };
+  // Validation schema for Formik
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Name is required"),
+    surname: Yup.string().required("Surname is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    message: Yup.string().required("Message is required"),
+  });
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Name</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter Name"
-        value={name}
-        onChangeText={handleNameChange}
-      />
+    <ImageBackground
+      source={HomeBackground} // Replace with your image URL
+      style={styles.backgroundImage}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <Formik
+          initialValues={{
+            name: "",
+            surname: "",
+            email: "",
+            message: "",
+          }}
+          validationSchema={validationSchema}
+          onSubmit={(values) => {
+            console.log("Form Values:", values);
+            alert("Form submitted successfully!");
+          }}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <View style={styles.container}>
+              {/* Header */}
+              <Text style={styles.title}>Title</Text>
 
-      <Text style={styles.label}>Surname</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter Surname"
-        value={surname}
-        onChangeText={handleSurnameChange}
-      />
+              {/* Form Inputs */}
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Name</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Value"
+                  onChangeText={handleChange("name")}
+                  onBlur={handleBlur("name")}
+                  value={values.name}
+                />
+                {touched.name && errors.name && (
+                  <Text style={styles.errorText}>{errors.name}</Text>
+                )}
+              </View>
 
-      <Text style={styles.label}>Email</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter Email"
-        value={email}
-        onChangeText={handleEmailChange}
-      />
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Surname</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Value"
+                  onChangeText={handleChange("surname")}
+                  onBlur={handleBlur("surname")}
+                  value={values.surname}
+                />
+                {touched.surname && errors.surname && (
+                  <Text style={styles.errorText}>{errors.surname}</Text>
+                )}
+              </View>
 
-      <Text style={styles.label}>Message</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter Message"
-        value={message}
-        onChangeText={handleMessageChange}
-        multiline
-        numberOfLines={4}
-      />
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Email</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Value"
+                  keyboardType="email-address"
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
+                  value={values.email}
+                />
+                {touched.email && errors.email && (
+                  <Text style={styles.errorText}>{errors.email}</Text>
+                )}
+              </View>
 
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Submit</Text>
-      </TouchableOpacity>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Message</Text>
+                <TextInput
+                  style={[styles.input, styles.textArea]}
+                  placeholder="Value"
+                  multiline
+                  numberOfLines={4}
+                  onChangeText={handleChange("message")}
+                  onBlur={handleBlur("message")}
+                  value={values.message}
+                />
+                {touched.message && errors.message && (
+                  <Text style={styles.errorText}>{errors.message}</Text>
+                )}
+              </View>
 
-      <View style={styles.bottomBar}>
-        <TouchableOpacity style={styles.bottomBarItem}>
-          <FontAwesome5 name="map-marker-alt" size={24} color="black" />
-          <Text style={styles.bottomBarText}>Explore</Text>
+              {/* Submit Button */}
+              <TouchableOpacity
+                style={styles.submitButton}
+                onPress={handleSubmit}
+              >
+                <Text style={styles.submitButtonText}>Submit</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </Formik>
+      </ScrollView>
+
+      {/* Bottom Tab Navigation Placeholder */}
+      <View style={styles.tabBar}>
+        <TouchableOpacity>
+          <Text style={styles.tabText}>Explore</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.bottomBarItem}>
-          <FontAwesome5 name="bookmark" size={24} color="black" />
-          <Text style={styles.bottomBarText}>Saved</Text>
+        <TouchableOpacity>
+          <Text style={styles.tabText}>Saved</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.bottomBarItem}>
-          <FontAwesome5 name="bell" size={24} color="black" />
-          <Text style={styles.bottomBarText}>Updates</Text>
+        <TouchableOpacity>
+          <Text style={styles.tabText}>Updates</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+  },
+  scrollContainer: {
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+  },
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: "#f0f0f0",
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 20,
+  },
+  inputGroup: {
+    width: "100%",
+    marginBottom: 15,
   },
   label: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 14,
+    color: "#fff",
     marginBottom: 5,
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
+    backgroundColor: "#fff",
+    borderRadius: 8,
     padding: 10,
-    marginBottom: 15,
-    borderRadius: 5,
+    fontSize: 16,
   },
-  button: {
-    backgroundColor: "blue",
-    padding: 15,
-    borderRadius: 5,
-    marginTop: 20,
+  textArea: {
+    textAlignVertical: "top",
   },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  bottomBar: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 10,
-    backgroundColor: "white",
-  },
-  bottomBarItem: {
-    alignItems: "center",
-  },
-  bottomBarText: {
+  errorText: {
+    color: "red",
     fontSize: 12,
     marginTop: 5,
+  },
+  submitButton: {
+    backgroundColor: "#000",
+    paddingVertical: 12,
+    paddingHorizontal: 40,
+    borderRadius: 8,
+    marginTop: 20,
+  },
+  submitButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  tabBar: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    backgroundColor: "#f8f8f8",
+    paddingVertical: 10,
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    borderTopWidth: 1,
+    borderTopColor: "#ccc",
+  },
+  tabText: {
+    fontSize: 14,
+    color: "#555",
   },
 });
 

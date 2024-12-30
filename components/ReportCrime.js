@@ -1,148 +1,215 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  StyleSheet,
   View,
+  Text,
+  StyleSheet,
   TextInput,
   TouchableOpacity,
-  Text,
+  ScrollView,
+  ImageBackground,
 } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { Formik } from "formik";
+import * as Yup from "yup"; // For validation schema
+
+import HomeBackground from "../images/HomeBackground.jpg";
 
 const ReportCrime = () => {
-  const [label, setLabel] = useState("");
-  const [title, setTitle] = useState("");
-  const [values, setValues] = useState(["", "", "", ""]);
-
-  const handleLabelChange = (text) => {
-    setLabel(text);
-  };
-
-  const handleTitleChange = (text) => {
-    setTitle(text);
-  };
-
-  const handleValueChange = (index, text) => {
-    const newValues = [...values];
-    newValues[index] = text;
-    setValues(newValues);
-  };
-
-  const handleBackPress = () => {
-    // Handle back navigation logic here
-  };
-
-  const handleNextPress = () => {
-    // Handle next navigation logic here
-  };
+  // Validation schema for Formik
+  const validationSchema = Yup.object().shape({
+    input1: Yup.string().required("This field is required"),
+    input2: Yup.string().required("This field is required"),
+    input3: Yup.string().required("This field is required"),
+    input4: Yup.string().required("This field is required"),
+  });
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Label</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter Label"
-        value={label}
-        onChangeText={handleLabelChange}
-      />
+    <ImageBackground
+      source={HomeBackground} // Replace with your image URL
+      style={styles.backgroundImage}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <Formik
+          initialValues={{
+            input1: "",
+            input2: "",
+            input3: "",
+            input4: "",
+          }}
+          validationSchema={validationSchema}
+          onSubmit={(values) => {
+            console.log("Form Values:", values);
+            alert("Form submitted successfully!");
+          }}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <View style={styles.container}>
+              {/* Header */}
+              <Text style={styles.title}>Report A Crime</Text>
 
-      <Text style={styles.label}>Title</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter Title"
-        value={title}
-        onChangeText={handleTitleChange}
-      />
+              {/* Form Inputs */}
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Label</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Value"
+                  onChangeText={handleChange("input1")}
+                  onBlur={handleBlur("input1")}
+                  value={values.input1}
+                />
+                {touched.input1 && errors.input1 && (
+                  <Text style={styles.errorText}>{errors.input1}</Text>
+                )}
+              </View>
 
-      {values.map((value, index) => (
-        <View key={index} style={styles.valueContainer}>
-          <Text style={styles.label}>Value</Text>
-          <TextInput
-            style={styles.input}
-            placeholder={`Enter Value ${index + 1}`}
-            value={value}
-            onChangeText={(text) => handleValueChange(index, text)}
-          />
-        </View>
-      ))}
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Label</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Value"
+                  onChangeText={handleChange("input2")}
+                  onBlur={handleBlur("input2")}
+                  value={values.input2}
+                />
+                {touched.input2 && errors.input2 && (
+                  <Text style={styles.errorText}>{errors.input2}</Text>
+                )}
+              </View>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={handleBackPress}>
-          <Text style={styles.buttonText}>Back</Text>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Label</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Value"
+                  onChangeText={handleChange("input3")}
+                  onBlur={handleBlur("input3")}
+                  value={values.input3}
+                />
+                {touched.input3 && errors.input3 && (
+                  <Text style={styles.errorText}>{errors.input3}</Text>
+                )}
+              </View>
+
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Label</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Value"
+                  onChangeText={handleChange("input4")}
+                  onBlur={handleBlur("input4")}
+                  value={values.input4}
+                />
+                {touched.input4 && errors.input4 && (
+                  <Text style={styles.errorText}>{errors.input4}</Text>
+                )}
+              </View>
+
+              {/* Navigation Buttons */}
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.button}>
+                  <Text style={styles.buttonText}>Back</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                  <Text style={styles.buttonText}>Next</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        </Formik>
+      </ScrollView>
+
+      {/* Bottom Tab Navigation Placeholder */}
+      <View style={styles.tabBar}>
+        <TouchableOpacity>
+          <Text style={styles.tabText}>Explore</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleNextPress}>
-          <Text style={styles.buttonText}>Next</Text>
+        <TouchableOpacity>
+          <Text style={styles.tabText}>Saved</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text style={styles.tabText}>Updates</Text>
         </TouchableOpacity>
       </View>
-
-      <View style={styles.bottomBar}>
-        <TouchableOpacity style={styles.bottomBarItem}>
-          <FontAwesome5 name="map-marker-alt" size={24} color="black" />
-          <Text style={styles.bottomBarText}>Explore</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.bottomBarItem}>
-          <FontAwesome5 name="bookmark" size={24} color="black" />
-          <Text style={styles.bottomBarText}>Saved</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.bottomBarItem}>
-          <FontAwesome5 name="bell" size={24} color="black" />
-          <Text style={styles.bottomBarText}>Updates</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+  },
+  scrollContainer: {
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+  },
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: "#f0f0f0",
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 20,
+  },
+  inputGroup: {
+    width: "100%",
+    marginBottom: 15,
   },
   label: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 14,
+    color: "#fff",
     marginBottom: 5,
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
+    backgroundColor: "#fff",
+    borderRadius: 8,
     padding: 10,
-    marginBottom: 15,
-    borderRadius: 5,
+    fontSize: 16,
   },
-  valueContainer: {
-    marginBottom: 15,
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 5,
   },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    width: "100%",
+    marginTop: 20,
   },
   button: {
-    backgroundColor: "red",
-    padding: 15,
-    borderRadius: 5,
+    backgroundColor: "#ff0000",
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 8,
   },
   buttonText: {
-    color: "white",
+    color: "#fff",
+    fontSize: 16,
     fontWeight: "bold",
-    textAlign: "center",
   },
-  bottomBar: {
+  tabBar: {
     flexDirection: "row",
     justifyContent: "space-around",
+    backgroundColor: "#f8f8f8",
+    paddingVertical: 10,
     position: "absolute",
     bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 10,
-    backgroundColor: "white",
+    width: "100%",
+    borderTopWidth: 1,
+    borderTopColor: "#ccc",
   },
-  bottomBarItem: {
-    alignItems: "center",
-  },
-  bottomBarText: {
-    fontSize: 12,
-    marginTop: 5,
+  tabText: {
+    fontSize: 14,
+    color: "#555",
   },
 });
 

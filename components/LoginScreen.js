@@ -6,56 +6,121 @@ import {
   StyleSheet,
   TouchableOpacity,
   StatusBar,
-  CheckBox,
+  ScrollView,
+  ImageBackground,
 } from "react-native";
-import LinearGradient from "expo-linear-gradient";
+import CheckBox from "react-native-checkbox";
+import { Formik } from "formik";
+import * as Yup from "yup"; // For validation schema
+
+//import LinearGradient from "expo-linear-gradient";
+
+import Login from "../images/Login.jpg";
 
 export default function LoginScreen() {
   const [isSelected, setSelection] = React.useState(false);
 
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().required("This field is required"),
+    password: Yup.string().required("This field is required"),
+  });
+
   return (
-    <LinearGradient
-      colors={["#4c004c", "#800080", "#ff00ff"]}
-      style={styles.container}
+    <ImageBackground
+      source={Login} // Replace with your image URL
+      style={styles.backgroundImage}
     >
-      <StatusBar barStyle="light-content" backgroundColor="#4c004c" />
-      <View style={styles.formContainer}>
-        <Text style={styles.label}>Email</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Value"
-          placeholderTextColor="#aaa"
-        />
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <Formik
+          initialValues={{
+            email: "",
+            password: "",
+          }}
+          validationSchema={validationSchema}
+          onSubmit={(values) => {
+            console.log("Form Values:", values);
+            alert("Form submitted successfully!");
+          }}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <View
+              colors={["#4c004c", "#800080", "#ff00ff"]}
+              style={styles.container}
+            >
+              <Text style={styles.title}>Welcome Back</Text>
 
-        <Text style={styles.label}>Password</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Value"
-          placeholderTextColor="#aaa"
-          secureTextEntry
-        />
+              <StatusBar barStyle="light-content" backgroundColor="#4c004c" />
+              <View style={styles.formContainer}>
+                <Text style={styles.label}>Email</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter Your Email"
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
+                  value={values.email}
+                />
+                {touched.email && errors.email && (
+                  <Text style={styles.errorText}>{errors.email}</Text>
+                )}
 
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            value={isSelected}
-            onValueChange={setSelection}
-            style={styles.checkbox}
-          />
-          <View>
-            <Text style={styles.checkboxLabel}>Label</Text>
-            <Text style={styles.checkboxDescription}>Description</Text>
-          </View>
-        </View>
+                <Text style={styles.label}>Password</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter Your Password"
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  value={values.password}
+                />
+                {touched.password && errors.password && (
+                  <Text style={styles.errorText}>{errors.password}</Text>
+                )}
 
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-      </View>
-    </LinearGradient>
+                <View style={styles.checkboxContainer}>
+                  <CheckBox
+                    label={"Remember Me"}
+                    value={isSelected}
+                    onValueChange={setSelection}
+                    style={styles.checkbox}
+                  />
+                </View>
+
+                <TouchableOpacity style={styles.button}>
+                  <Text style={styles.buttonText}>Login</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        </Formik>
+      </ScrollView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  scrollContainer: {
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+    marginTop: "60",
+  },
+  title: {
+    fontSize: 35,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 20,
+  },
   container: {
     flex: 1,
     justifyContent: "center",
@@ -70,6 +135,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
+  },
+  input: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 10,
+    fontSize: 16,
   },
   label: {
     fontSize: 16,
@@ -93,15 +164,6 @@ const styles = StyleSheet.create({
   },
   checkbox: {
     marginRight: 10,
-  },
-  checkboxLabel: {
-    fontSize: 14,
-    color: "#333",
-    fontWeight: "bold",
-  },
-  checkboxDescription: {
-    fontSize: 12,
-    color: "#777",
   },
   button: {
     backgroundColor: "#800080",

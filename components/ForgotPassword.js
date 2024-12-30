@@ -1,89 +1,163 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  StyleSheet,
   View,
+  Text,
+  StyleSheet,
   TextInput,
   TouchableOpacity,
-  Text,
+  ImageBackground,
 } from "react-native";
+import { Formik } from "formik";
+import * as Yup from "yup"; // For validation schema
 
-const ForgotPassword = () => {
-  const [email, setEmail] = useState("");
+import Login from "../images/Login.jpg";
 
-  const handleEmailChange = (text) => {
-    setEmail(text);
-  };
-
-  const handleCancel = () => {
-    // Handle cancel logic here
-  };
-
-  const handleResetPassword = () => {
-    // Handle reset password logic here
-  };
+const ForgotPassword = ({ navigation }) => {
+  // Validation schema for Formik
+  const validationSchema = Yup.object().shape({
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+  });
 
   return (
-    <View style={styles.container}>
-      <View style={styles.contentContainer}>
-        <Text style={styles.label}>Email</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Email"
-          value={email}
-          onChangeText={handleEmailChange}
-        />
+    <ImageBackground
+      source={Login} // Replace with your image URL
+      style={styles.backgroundImage}
+    >
+      <View style={styles.container}>
+        <Formik
+          initialValues={{
+            email: "",
+          }}
+          validationSchema={validationSchema}
+          onSubmit={(values) => {
+            console.log("Reset Email:", values.email);
+            alert("Password reset instructions sent to your email.");
+          }}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <View style={styles.formContainer}>
+              {/* Email Input */}
+              <Text style={styles.label}>Email</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter Your Current Email Address"
+                keyboardType="email-address"
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                value={values.email}
+              />
+              {touched.email && errors.email && (
+                <Text style={styles.errorText}>{errors.email}</Text>
+              )}
 
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={handleCancel}>
-            <Text style={styles.buttonText}>Cancel</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
-            <Text style={styles.buttonText}>Reset Password</Text>
-          </TouchableOpacity>
-        </View>
+              {/* Action Buttons */}
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={[styles.button, styles.cancelButton]}
+                  onPress={() => navigation.goBack()} // Go back to the previous screen
+                >
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.button, styles.resetButton]}
+                  onPress={handleSubmit}
+                >
+                  <Text style={styles.resetButtonText}>Reset Password</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        </Formik>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   container: {
     flex: 1,
-    backgroundColor: "#1e1e1e", // Dark background color
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
   },
-  contentContainer: {
-    backgroundColor: "rgba(255, 255, 255, 0.1)", // Semi-transparent background
+  formContainer: {
+    backgroundColor: "rgba(255, 255, 255, 0.9)", // Transparent background
+    borderRadius: 16,
     padding: 20,
-    borderRadius: 10,
-    margin: 20,
+    width: "100%",
+    maxWidth: 350,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
   label: {
     fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 5,
-    color: "#fff", // White text color
+    color: "#333",
+    marginBottom: 8,
+    alignSelf: "center",
   },
   input: {
+    width: "100%",
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
     borderWidth: 1,
-    borderColor: "#fff",
-    padding: 10,
-    marginBottom: 15,
-    borderRadius: 5,
-    color: "#fff", // White text color
+    borderColor: "#ddd",
+    marginBottom: 16,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginBottom: 10,
+    alignSelf: "flex-start",
   },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    width: "100%",
   },
   button: {
-    backgroundColor: "blue",
-    padding: 15,
-    borderRadius: 5,
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: "center",
+    marginHorizontal: 5,
   },
-  buttonText: {
-    color: "white",
+  cancelButton: {
+    backgroundColor: "#ddd",
+  },
+  cancelButtonText: {
+    fontSize: 16,
+    color: "#333",
     fontWeight: "bold",
-    textAlign: "center",
+  },
+  resetButton: {
+    backgroundColor: "#000",
+  },
+  resetButtonText: {
+    fontSize: 16,
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 

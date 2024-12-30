@@ -30,6 +30,6 @@ const AppNavigator = () => {
     </NavigationContainer>
   );
 };
-registerRootComponent(SplashScreen);
+registerRootComponent(RegisterScreen);
 
 export default AppNavigator;
