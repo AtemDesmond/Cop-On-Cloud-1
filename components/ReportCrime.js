@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup"; // For validation schema
+import { FontAwesome5 } from "@expo/vector-icons";
 
 import HomeBackground from "../images/HomeBackground.jpg";
 
@@ -125,15 +126,18 @@ const ReportCrime = () => {
       </ScrollView>
 
       {/* Bottom Tab Navigation Placeholder */}
-      <View style={styles.tabBar}>
-        <TouchableOpacity>
-          <Text style={styles.tabText}>Explore</Text>
+      <View style={styles.bottomBar}>
+        <TouchableOpacity style={styles.bottomBarItem}>
+          <FontAwesome5 name="map-marker-alt" size={24} color="black" />
+          <Text style={styles.bottomBarText}>Explore</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={styles.tabText}>Saved</Text>
+        <TouchableOpacity style={styles.bottomBarItem}>
+          <FontAwesome5 name="home" size={24} color="black" />
+          <Text style={styles.bottomBarText}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={styles.tabText}>Updates</Text>
+        <TouchableOpacity style={styles.bottomBarItem}>
+          <FontAwesome5 name="bell" size={24} color="black" />
+          <Text style={styles.bottomBarText}>Updates</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>
@@ -196,20 +200,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-  tabBar: {
+  bottomBar: {
     flexDirection: "row",
     justifyContent: "space-around",
-    backgroundColor: "#f8f8f8",
-    paddingVertical: 10,
     position: "absolute",
     bottom: 0,
-    width: "100%",
-    borderTopWidth: 1,
-    borderTopColor: "#ccc",
+    left: 0,
+    right: 0,
+    padding: 10,
+    backgroundColor: "white",
   },
-  tabText: {
-    fontSize: 14,
-    color: "#555",
+  bottomBarItem: {
+    alignItems: "center",
+  },
+  bottomBarText: {
+    fontSize: 12,
+    marginTop: 5,
   },
 });
 

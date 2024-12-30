@@ -92,7 +92,7 @@ export default function RegisterScreen() {
                 </View>
 
                 <TouchableOpacity style={styles.button}>
-                  <Text style={styles.buttonText}>Login</Text>
+                  <Text style={styles.buttonText}>Register</Text>
                 </TouchableOpacity>
               </View>
             </View>

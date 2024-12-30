@@ -1,7 +1,7 @@
 import React from "react";
 import { registerRootComponent } from "expo";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SplashScreen from "./components/SplashScreen";
 import LoginScreen from "./components/LoginScreen";
 import RegisterScreen from "./components/RegisterScreen";
@@ -10,7 +10,7 @@ import ForgotPassword from "./components/ForgotPassword";
 import ReportCrime from "./components/ReportCrime";
 import ContinueReportCrime from "./components/ContinueReportCrime";
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
   return (
