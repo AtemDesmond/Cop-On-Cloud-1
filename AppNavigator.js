@@ -31,5 +31,6 @@ const AppNavigator = () => {
   );
 };
 registerRootComponent(RegisterScreen);
+// i think the main component is AppNavigator
 
 export default AppNavigator;
