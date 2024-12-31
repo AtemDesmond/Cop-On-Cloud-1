@@ -41,6 +41,8 @@ export default function RegisterScreen() {
             console.log("Form Values:", values);
             alert("Form submitted successfully!");
           }}
+
+          
         >
           {({
             handleChange,
