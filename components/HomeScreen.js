@@ -6,69 +6,160 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
+import { FontAwesome5 } from "@expo/vector-icons";
+import Carousel from "react-native-snap-carousel";
+import axios from "axios"; // For fetching images from your database
+
+import HomeBackground from "../images/HomeBackground.jpg";
+
+const { width: screenWidth } = Dimensions.get("window");
 
 export default function HomeScreen() {
-  return (
-    <View style={styles.container}>
-      {/* Header Section */}
-      <View style={styles.header}>
-        <TouchableOpacity>
-          <Text style={styles.menuIcon}>☰</Text>
-        </TouchableOpacity>
-        <Text style={styles.appTitle}>CopOnCloud</Text>
-        <TouchableOpacity>
-          <Image
-            source={{ uri: "https://via.placeholder.com/40" }} // Replace with avatar image
-            style={styles.avatar}
-          />
-        </TouchableOpacity>
-      </View>
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-      {/* Welcome Section */}
-      <View style={styles.welcomeContainer}>
-        <Text style={styles.welcomeText}>
-          Hi, Mike 👋{"\n"}
-          Welcome
-        </Text>
-      </View>
+  // Fetch images from the database
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const response = await axios.get(
+          "https://your-api-endpoint.com/images"
+        );
+        setImages(response.data); // Ensure your API returns an array of image URLs
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching images:", error);
+        setLoading(false);
+      }
+    };
+    fetchImages();
+  }, []);
 
-      {/* Search Section */}
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search"
-          placeholderTextColor="#aaa"
-        />
-        <TouchableOpacity>
-          <Text style={styles.searchIcon}>🔍</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Nearby and Latest Section */}
-      <View style={styles.filterContainer}>
-        <TouchableOpacity style={styles.filterButton}>
-          <Text style={styles.filterText}>Nearby</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.filterButton}>
-          <Text style={styles.filterText}>Latest</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Feature Cards */}
-      <View style={styles.cardContainer}>
-        <TouchableOpacity style={styles.card}>
-          <Text style={styles.cardTitle}>Report a Crime</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.card}>
-          <Text style={styles.cardTitle}>Missing</Text>
-        </TouchableOpacity>
-      </View>
+  const renderItem = ({ item }) => (
+    <View style={styles.carouselItem}>
+      <Image
+        source={{ uri: item.url }}
+        style={styles.image}
+        resizeMode="cover"
+      />
     </View>
+  );
+
+  if (loading) {
+    return (
+      <View style={styles.loading}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  return (
+    <ImageBackground
+      source={HomeBackground} // Replace with your image URL
+      style={styles.backgroundImage}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.container}>
+          {/* Header Section */}
+          <View style={styles.header}>
+            <TouchableOpacity>
+              <Text style={styles.menuIcon}>☰</Text>
+            </TouchableOpacity>
+            <Text style={styles.appTitle}>CopOnCloud</Text>
+            <TouchableOpacity>
+              <Image
+                source={{ uri: "https://via.placeholder.com/40" }} // Replace with avatar image
+                style={styles.avatar}
+              />
+            </TouchableOpacity>
+          </View>
+
+          {/* Welcome Section */}
+          <View style={styles.welcomeContainer}>
+            <Text style={styles.welcomeText}>
+              Hi, Mike 👋{"\n"}
+              Welcome
+            </Text>
+          </View>
+
+          {/* Search Section */}
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search"
+              placeholderTextColor="#aaa"
+            />
+            <TouchableOpacity>
+              <Text style={styles.searchIcon}>🔍</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Nearby and Latest Section */}
+          <View style={styles.filterContainer}>
+            <TouchableOpacity style={styles.filterButton}>
+              <Text style={styles.filterText}>Nearby</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.filterButton}>
+              <Text style={styles.filterText}>Latest</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Carousel for displaying images from the database */}
+          <View style={styles.container_1}>
+            <Carousel
+              data={images}
+              renderItem={renderItem}
+              sliderWidth={screenWidth}
+              itemWidth={screenWidth - 60} // Adjust for padding
+              loop={true}
+              autoplay={true}
+              autoplayInterval={3000}
+            />
+          </View>
+
+          {/* Feature Cards */}
+          <View style={styles.cardContainer}>
+            <TouchableOpacity style={styles.card}>
+              <Text style={styles.cardTitle}>Report a Crime</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.card}>
+              <Text style={styles.cardTitle}>Missing</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+      {/* Bottom Tab Navigation Placeholder */}
+      <View style={styles.bottomBar}>
+        <TouchableOpacity style={styles.bottomBarItem}>
+          <FontAwesome5 name="map-marker-alt" size={24} color="black" />
+          <Text style={styles.bottomBarText}>Explore</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.bottomBarItem}>
+          <FontAwesome5 name="home" size={24} color="black" />
+          <Text style={styles.bottomBarText}>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.bottomBarItem}>
+          <FontAwesome5 name="bell" size={24} color="black" />
+          <Text style={styles.bottomBarText}>Updates</Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+  },
+  container_1: {
+    flex: 1,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   container: {
     flex: 1,
     backgroundColor: "#000",
@@ -135,6 +226,24 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 14,
   },
+  carouselItem: {
+    borderRadius: 10,
+    overflow: "hidden",
+    elevation: 5, // For shadow on Android
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 5 },
+    shadowRadius: 5,
+  },
+  image: {
+    width: "100%",
+    height: 200,
+  },
+  loading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   cardContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -155,5 +264,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#000",
+  },
+  bottomBar: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 10,
+    backgroundColor: "white",
+  },
+  bottomBarItem: {
+    alignItems: "center",
+  },
+  bottomBarText: {
+    fontSize: 12,
+    marginTop: 5,
   },
 });
